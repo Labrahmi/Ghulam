@@ -37,10 +37,10 @@ export const NavigationList = ({
   return (
     <nav className={className}>
       {header && (
-        <div className="cursor-default mb-6">{header}</div>
+        <div className="cursor-default mb-3 text-xs font-bold text-zinc-900 tracking-wide">{header}</div>
       )}
       
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-0.5">
         {items.map((item) => (
           <NavigationItem
             key={item.id}
@@ -53,7 +53,7 @@ export const NavigationList = ({
       </div>
 
       {footer && (
-        <div className="cursor-default mt-6">{footer}</div>
+        <div className="cursor-default mt-3 text-[10px] text-zinc-400">{footer}</div>
       )}
     </nav>
   );

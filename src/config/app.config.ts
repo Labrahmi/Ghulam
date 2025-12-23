@@ -24,6 +24,6 @@ export const appConfig = {
   // UI Configuration
   ui: {
     maxWidth: "lg:max-w-7xl xl:max-w-[120rem]",
-    sidebarMinWidth: "min-w-64",
+    sidebarWidth: "w-40",
   },
 } as const;

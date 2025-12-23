@@ -36,22 +36,22 @@ export function NavigationItem({
       href={href}
       onClick={onClick}
       className={cn(
-        'group p-3 px-4 flex justify-between items-center cursor-pointer',
-        theme.radius.lg,
+        'group py-1.5 px-2.5 flex justify-between items-center cursor-pointer',
+        theme.radius.md,
         theme.transition.default,
         isActive
-          ? 'bg-zinc-900 text-white shadow-lg scale-[1.02]'
-          : 'hover:bg-zinc-50 text-zinc-600 hover:text-zinc-900'
+          ? 'bg-zinc-900 text-white'
+          : 'hover:bg-zinc-100 text-zinc-500 hover:text-zinc-900'
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <Icon
-          size={18}
-          className={cn(isActive ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-600')}
+          size={14}
+          className={cn(isActive ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-500')}
         />
-        <span className={cn(theme.font.medium, theme.text.sm)}>{label}</span>
+        <span className="text-xs font-medium">{label}</span>
       </div>
-      {isActive && <ChevronRight size={14} className="text-zinc-400" />}
+      {isActive && <ChevronRight size={10} className="text-zinc-400" />}
     </Link>
   );
 }

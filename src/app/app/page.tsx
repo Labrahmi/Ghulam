@@ -9,145 +9,137 @@ import {
   Search,
   Bell,
   MoreHorizontal,
+  Plus,
+  Calendar,
 } from 'lucide-react';
 
 /**
- * Dashboard Page
- * Self-contained page with all UI written inline for simplicity
+ * Dashboard Page - Compact & Clean Design
  */
 export default function DashboardPage() {
   const [searchFocused, setSearchFocused] = useState(false);
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <header className="p-8 pb-6 border-b border-zinc-100">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-zinc-900 mb-1">Dashboard</h1>
-            <p className="text-zinc-500 text-sm">Welcome back, here&apos;s what&apos;s happening</p>
+      {/* Header - Compact */}
+      <header className="px-3 sm:px-4 py-2.5 border-b border-zinc-100 flex items-center justify-between gap-3">
+        <div className="pl-8 lg:pl-0">
+          <h1 className="text-base sm:text-lg font-semibold text-zinc-900">Dashboard</h1>
+        </div>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Search */}
+          <div className={`relative transition-all duration-200 ${searchFocused ? 'w-48 sm:w-56' : 'w-32 sm:w-40'}`}>
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full pl-8 pr-2 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-zinc-400 transition-all"
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+            />
           </div>
-          <div className="flex items-center gap-3">
-            {/* Search */}
-            <div className={`relative transition-all duration-200 ${searchFocused ? 'w-80' : 'w-64'}`}>
-              <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                placeholder="Search projects, tasks..."
-                className="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-              />
-            </div>
-            {/* Notifications */}
-            <button className="p-2.5 hover:bg-zinc-50 rounded-xl transition-colors relative">
-              <Bell size={18} className="text-zinc-600" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-            </button>
-            {/* Profile */}
-            <button className="p-2.5 hover:bg-zinc-50 rounded-xl transition-colors">
-              <User size={18} className="text-zinc-600" />
-            </button>
-          </div>
+          <button className="p-1.5 hover:bg-zinc-100 rounded-lg transition-colors relative">
+            <Bell size={16} className="text-zinc-500" />
+            <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full" />
+          </button>
+          <button className="p-1.5 hover:bg-zinc-100 rounded-lg transition-colors">
+            <User size={16} className="text-zinc-500" />
+          </button>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="flex-1 p-8 space-y-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Content - Compact */}
+      <div className="flex-1 p-3 sm:p-4 space-y-3 sm:space-y-4 overflow-auto">
+        {/* Stats Row - Inline compact cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
           {[
-            { title: 'Active Projects', value: 12, trend: 8.2, icon: FolderOpen },
-            { title: 'Completed Tasks', value: 124, trend: 23.1, icon: TrendingUp },
-            { title: 'Team Members', value: 8, trend: 12.5, icon: User },
-            { title: 'This Month', value: '47h', trend: 5.7, icon: Clock },
+            { title: 'Projects', value: 12, trend: '+8%', icon: FolderOpen, color: 'text-blue-600' },
+            { title: 'Tasks', value: 124, trend: '+23%', icon: TrendingUp, color: 'text-green-600' },
+            { title: 'Team', value: 8, trend: '+2', icon: User, color: 'text-violet-600' },
+            { title: 'Hours', value: '47h', trend: '+6%', icon: Clock, color: 'text-amber-600' },
           ].map((stat) => (
             <div
               key={stat.title}
-              className="bg-white rounded-2xl p-6 border border-zinc-100 hover:border-zinc-200 transition-all duration-200 group hover:shadow-sm"
+              className="flex items-center gap-2.5 p-2.5 sm:p-3 bg-zinc-50 rounded-lg border border-zinc-100 hover:border-zinc-200 transition-all"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-zinc-50 rounded-xl group-hover:bg-zinc-100 transition-colors">
-                  <stat.icon size={20} className="text-zinc-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                  +{stat.trend}%
-                </span>
+              <div className={`p-1.5 bg-white rounded-md ${stat.color}`}>
+                <stat.icon size={14} />
               </div>
-              <div className="space-y-1">
-                <h3 className="text-2xl font-bold text-zinc-900">{stat.value}</h3>
-                <p className="text-sm text-zinc-500">{stat.title}</p>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-base sm:text-lg font-bold text-zinc-900">{stat.value}</span>
+                  <span className="text-[10px] font-medium text-green-600">{stat.trend}</span>
+                </div>
+                <p className="text-[10px] text-zinc-500 truncate">{stat.title}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-2xl border border-zinc-100 overflow-hidden">
-          <div className="p-6 border-b border-zinc-100">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-zinc-900">Recent Activity</h2>
-              <button className="text-sm text-zinc-500 hover:text-zinc-700 transition-colors">
-                View all
-              </button>
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+          {/* Recent Activity - Takes 2 cols */}
+          <div className="lg:col-span-2 bg-zinc-50 rounded-lg border border-zinc-100">
+            <div className="px-3 py-2 border-b border-zinc-100 flex items-center justify-between">
+              <h2 className="font-medium text-zinc-900 text-xs">Recent Activity</h2>
+              <button className="text-[10px] text-zinc-500 hover:text-zinc-700">View all →</button>
             </div>
-          </div>
-          <div className="divide-y divide-zinc-50">
-            {[
-              { title: 'Project Alpha Review', subtitle: 'Design system updates', time: '2h ago', status: 'completed' },
-              { title: 'Client Meeting Prep', subtitle: 'Q3 roadmap discussion', time: '4h ago', status: 'pending' },
-              { title: 'Code Review', subtitle: 'Authentication module', time: '6h ago', status: 'review' },
-              { title: 'Team Standup', subtitle: 'Weekly sync meeting', time: '1d ago', status: 'completed' },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex items-center justify-between p-4 hover:bg-zinc-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-zinc-300 rounded-full group-hover:bg-zinc-400 transition-colors" />
-                  <div>
-                    <h4 className="font-medium text-zinc-900 text-sm">{item.title}</h4>
-                    <p className="text-xs text-zinc-500">{item.subtitle}</p>
+            <div className="divide-y divide-zinc-100">
+              {[
+                { title: 'Project Alpha Review', time: '2h', status: 'done' },
+                { title: 'Client Meeting Prep', time: '4h', status: 'pending' },
+                { title: 'Code Review', time: '6h', status: 'review' },
+                { title: 'Team Standup', time: '1d', status: 'done' },
+                { title: 'Deploy v2.1', time: '2d', status: 'done' },
+              ].map((item) => (
+                <div key={item.title} className="flex items-center justify-between px-3 py-2 hover:bg-white transition-colors group">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-1 h-1 rounded-full ${
+                      item.status === 'done' ? 'bg-green-400' : item.status === 'pending' ? 'bg-amber-400' : 'bg-blue-400'
+                    }`} />
+                    <span className="text-xs text-zinc-700 truncate">{item.title}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-zinc-400">{item.time}</span>
+                    <MoreHorizontal size={12} className="text-zinc-300 opacity-0 group-hover:opacity-100" />
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      item.status === 'completed'
-                        ? 'bg-green-100 text-green-700'
-                        : item.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-blue-100 text-blue-700'
-                    }`}
-                  >
-                    {item.status}
-                  </span>
-                  <span className="text-xs text-zinc-400">{item.time}</span>
-                  <MoreHorizontal
-                    size={14}
-                    className="text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Actions - 1 col */}
+          <div className="space-y-2 sm:space-y-3">
+            <button className="w-full flex items-center gap-2.5 p-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors group">
+              <Plus size={14} className="group-hover:rotate-90 transition-transform" />
+              <div className="text-left">
+                <p className="text-xs font-medium">New Project</p>
+                <p className="text-[10px] text-zinc-400">Create & invite team</p>
+              </div>
+            </button>
+            <button className="w-full flex items-center gap-2.5 p-3 bg-zinc-50 border border-zinc-200 rounded-lg hover:bg-zinc-100 transition-colors">
+              <Calendar size={14} className="text-zinc-500" />
+              <div className="text-left">
+                <p className="text-xs font-medium text-zinc-900">Schedule</p>
+                <p className="text-[10px] text-zinc-500">Book a meeting</p>
+              </div>
+            </button>
+            
+            {/* Mini stats */}
+            <div className="p-3 bg-gradient-to-br from-zinc-100 to-zinc-50 rounded-lg border border-zinc-200">
+              <p className="text-[10px] text-zinc-500 mb-1">This week</p>
+              <div className="flex items-end justify-between">
+                <div>
+                  <span className="text-xl font-bold text-zinc-900">89%</span>
+                  <p className="text-[10px] text-green-600">+12% from last</p>
+                </div>
+                <div className="flex items-end gap-0.5 h-8">
+                  {[40, 65, 45, 80, 60, 90, 75].map((h, i) => (
+                    <div key={i} className="w-1.5 bg-zinc-900 rounded-sm" style={{ height: `${h}%` }} />
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-6 text-white">
-            <h3 className="font-semibold mb-2">Start New Project</h3>
-            <p className="text-zinc-300 text-sm mb-4">Create a new project and invite your team</p>
-            <button className="bg-white text-zinc-900 px-4 py-2 rounded-xl text-sm font-medium hover:bg-zinc-100 transition-colors">
-              Get Started
-            </button>
-          </div>
-          <div className="bg-zinc-50 rounded-2xl p-6 border border-zinc-200">
-            <h3 className="font-semibold mb-2 text-zinc-900">Schedule Meeting</h3>
-            <p className="text-zinc-500 text-sm mb-4">Book time with your team or clients</p>
-            <button className="bg-zinc-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-zinc-800 transition-colors">
-              Open Calendar
-            </button>
+            </div>
           </div>
         </div>
       </div>
