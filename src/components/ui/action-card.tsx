@@ -1,73 +1,85 @@
 import React from 'react';
-import { cn, styleConstants } from '@/lib/styles';
+import { cn, theme, presets } from '@/lib/styles';
 
 export interface ActionCardProps {
+  /** Card title */
   title: string;
-  description: string;
-  buttonText: string;
+  /** Card description */
+  description?: string;
+  /** Button text */
+  buttonText?: string;
+  /** Visual variant */
   variant?: 'primary' | 'secondary';
+  /** Button click handler */
   onAction?: () => void;
+  /** Custom content instead of default button */
+  children?: React.ReactNode;
+  /** Additional CSS classes */
   className?: string;
 }
 
 /**
- * Reusable ActionCard component for quick actions or CTAs
+ * ActionCard - CTA card with title, description, and action button
  * 
  * @example
  * ```tsx
  * <ActionCard
- *   title="Start New Project"
- *   description="Create a new project and invite your team"
- *   buttonText="Get Started"
+ *   title="Get Started"
+ *   description="Create your first project"
+ *   buttonText="Start Now"
  *   variant="primary"
- *   onAction={() => console.log('Action triggered')}
+ *   onAction={() => console.log('clicked')}
  * />
  * ```
  */
-export const ActionCard = ({ 
-  title, 
-  description, 
-  buttonText, 
+export function ActionCard({
+  title,
+  description,
+  buttonText,
   variant = 'primary',
   onAction,
-  className 
-}: ActionCardProps) => {
+  children,
+  className,
+}: ActionCardProps) {
   const isPrimary = variant === 'primary';
-  
+
   return (
-    <div className={cn(
-      "p-6",
-      styleConstants.radius.md,
-      isPrimary 
-        ? "bg-gradient-to-br from-zinc-900 to-zinc-800 text-white" 
-        : "bg-zinc-50 border border-zinc-200",
-      className
-    )}>
-      <h3 className={cn(
-        "font-semibold mb-2",
-        isPrimary ? "text-white" : "text-zinc-900"
-      )}>
-        {title}
-      </h3>
-      <p className={cn(
-        "text-sm mb-4",
-        isPrimary ? "text-zinc-300" : "text-zinc-500"
-      )}>
-        {description}
-      </p>
-      <button 
-        onClick={onAction}
+    <div
+      className={cn(
+        'p-6',
+        isPrimary ? presets.card.dark : presets.card.muted,
+        className
+      )}
+    >
+      <h3
         className={cn(
-          "px-4 py-2 text-sm font-medium",
-          styleConstants.radius.sm,
-          styleConstants.transition.colors,
-          isPrimary 
-            ? "bg-white text-zinc-900 hover:bg-zinc-100" 
-            : "bg-zinc-900 text-white hover:bg-zinc-800"
+          theme.font.semibold,
+          'mb-2',
+          isPrimary ? theme.colors.text.inverse : theme.colors.text.primary
         )}
       >
-        {buttonText}
-      </button>
+        {title}
+      </h3>
+      {description && (
+        <p
+          className={cn(
+            theme.text.sm,
+            'mb-4',
+            isPrimary ? theme.colors.text.light : theme.colors.text.muted
+          )}
+        >
+          {description}
+        </p>
+      )}
+      {children ||
+        (buttonText && (
+          <button
+            onClick={onAction}
+            className={isPrimary ? presets.button.secondary : presets.button.primary}
+          >
+            {buttonText}
+          </button>
+        ))}
     </div>
   );
-};
+}

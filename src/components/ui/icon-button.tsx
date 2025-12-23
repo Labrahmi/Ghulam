@@ -1,48 +1,56 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { LucideIcon } from 'lucide-react';
-import { cn, styleConstants } from '@/lib/styles';
+import { cn, theme, presets } from '@/lib/styles';
 
-export interface IconButtonProps {
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Icon component to render */
   icon: LucideIcon;
-  onClick?: () => void;
+  /** Icon size in pixels */
+  size?: number;
+  /** Show notification badge */
   badge?: boolean;
-  className?: string;
-  iconSize?: number;
+  /** Badge color class */
+  badgeColor?: string;
+  /** Button variant */
+  variant?: 'ghost' | 'solid';
 }
 
 /**
- * Reusable IconButton component for header actions
+ * IconButton - Button with just an icon, optional badge
  * 
  * @example
  * ```tsx
- * <IconButton 
- *   icon={Bell} 
- *   badge 
- *   onClick={() => console.log('Notification clicked')} 
- * />
+ * <IconButton icon={Bell} badge onClick={() => {}} />
+ * <IconButton icon={Settings} size={20} variant="solid" />
  * ```
  */
-export const IconButton = ({ 
-  icon: Icon, 
-  onClick, 
+export function IconButton({
+  icon: Icon,
+  size = 18,
   badge,
-  iconSize = 18,
-  className 
-}: IconButtonProps) => {
+  badgeColor = 'bg-red-500',
+  variant = 'ghost',
+  className,
+  ...props
+}: IconButtonProps) {
   return (
-    <button 
-      onClick={onClick}
+    <button
       className={cn(
-        "p-2.5 hover:bg-zinc-50 relative",
-        styleConstants.radius.sm,
-        styleConstants.transition.colors,
+        'relative',
+        variant === 'ghost' ? presets.button.ghost : presets.button.primary,
         className
       )}
+      {...props}
     >
-      <Icon size={iconSize} className="text-zinc-600" />
+      <Icon size={size} className={theme.colors.text.secondary} />
       {badge && (
-        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+        <div
+          className={cn(
+            'absolute -top-1 -right-1 w-3 h-3 rounded-full',
+            badgeColor
+          )}
+        />
       )}
     </button>
   );
-};
+}

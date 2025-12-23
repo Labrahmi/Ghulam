@@ -1,70 +1,71 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useState } from 'react';
 import { Search } from 'lucide-react';
-import { cn, styleConstants } from '@/lib/styles';
+import { cn, theme, presets } from '@/lib/styles';
 
 export interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  onFocusChange?: (focused: boolean) => void;
-  focusWidth?: string;
+  /** Icon to show (defaults to Search) */
+  icon?: React.ReactNode;
+  /** Whether to expand on focus */
+  expandOnFocus?: boolean;
+  /** Default width class */
   defaultWidth?: string;
+  /** Expanded width class */
+  expandedWidth?: string;
 }
 
 /**
- * Reusable SearchInput component with focus animation
+ * SearchInput - Search input field with icon and optional focus expansion
  * 
  * @example
  * ```tsx
- * <SearchInput
- *   placeholder="Search projects, tasks..."
- *   onFocusChange={(focused) => console.log('Focus:', focused)}
- * />
+ * <SearchInput placeholder="Search..." expandOnFocus />
+ * <SearchInput placeholder="Find users" defaultWidth="w-48" expandedWidth="w-72" />
  * ```
  */
-export const SearchInput = ({ 
+export function SearchInput({
   placeholder = 'Search...',
-  onFocusChange,
-  focusWidth = 'w-80',
+  icon,
+  expandOnFocus = true,
   defaultWidth = 'w-64',
+  expandedWidth = 'w-80',
   className,
-  ...props 
-}: SearchInputProps) => {
-  const [isFocused, setIsFocused] = React.useState(false);
+  onFocus,
+  onBlur,
+  ...props
+}: SearchInputProps) {
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = () => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(true);
-    onFocusChange?.(true);
+    onFocus?.(e);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
-    onFocusChange?.(false);
+    onBlur?.(e);
   };
 
   return (
-    <div className={cn(
-      "relative",
-      styleConstants.transition.default,
-      isFocused ? focusWidth : defaultWidth,
-      className
-    )}>
-      <Search 
-        size={16} 
-        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400" 
-      />
+    <div
+      className={cn(
+        'relative',
+        theme.transition.default,
+        expandOnFocus && (isFocused ? expandedWidth : defaultWidth),
+        !expandOnFocus && defaultWidth,
+        className
+      )}
+    >
+      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400">
+        {icon || <Search size={16} />}
+      </div>
       <input
         type="text"
         placeholder={placeholder}
-        className={cn(
-          "w-full pl-10 pr-4 py-2.5",
-          "bg-zinc-50 border border-zinc-200",
-          "text-sm",
-          "focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent",
-          styleConstants.radius.sm,
-          styleConstants.transition.default
-        )}
+        className={cn(presets.input.base, 'pl-10')}
         onFocus={handleFocus}
         onBlur={handleBlur}
         {...props}
       />
     </div>
   );
-};
+}

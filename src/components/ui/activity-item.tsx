@@ -1,76 +1,88 @@
 import React from 'react';
-import { MoreHorizontal } from 'lucide-react';
-import { ItemStatus } from '@/types/common.types';
-import { cn, getStatusColors, styleConstants } from '@/lib/styles';
+import { cn, theme, presets, getStatusColor, StatusType } from '@/lib/styles';
 
 export interface ActivityItemProps {
+  /** Main title text */
   title: string;
-  subtitle: string;
-  time: string;
-  status: ItemStatus;
-  onMoreClick?: () => void;
+  /** Secondary subtitle text */
+  subtitle?: string;
+  /** Time or date string */
+  time?: string;
+  /** Status badge */
+  status?: StatusType;
+  /** Left indicator color (Tailwind bg class) */
+  indicator?: string;
+  /** Right side action element */
+  action?: React.ReactNode;
+  /** Click handler */
+  onClick?: () => void;
+  /** Additional CSS classes */
   className?: string;
 }
 
 /**
- * Reusable ActivityItem component for displaying recent activity or tasks
+ * ActivityItem - A list item for displaying activity, tasks, or feed items
  * 
  * @example
  * ```tsx
  * <ActivityItem
- *   title="Project Alpha Review"
- *   subtitle="Design system updates"
+ *   title="Project Review"
+ *   subtitle="Design updates"
  *   time="2h ago"
  *   status="completed"
  * />
  * ```
  */
-export const ActivityItem = ({ 
-  title, 
-  subtitle, 
-  time, 
+export function ActivityItem({
+  title,
+  subtitle,
+  time,
   status,
-  onMoreClick,
-  className 
-}: ActivityItemProps) => {
+  indicator = 'bg-zinc-300',
+  action,
+  onClick,
+  className,
+}: ActivityItemProps) {
+  const Component = onClick ? 'button' : 'div';
+
   return (
-    <div className={cn(
-      "flex items-center justify-between p-4",
-      "hover:bg-zinc-50",
-      "group",
-      styleConstants.radius.sm,
-      styleConstants.transition.colors,
-      className
-    )}>
+    <Component
+      onClick={onClick}
+      className={cn(
+        'flex items-center justify-between p-4 w-full text-left',
+        'hover:bg-zinc-50 group',
+        theme.radius.md,
+        theme.transition.colors,
+        className
+      )}
+    >
       <div className="flex items-center gap-3">
-        <div className={cn(
-          "w-2 h-2 bg-zinc-300 rounded-full",
-          "group-hover:bg-zinc-400",
-          styleConstants.transition.colors
-        )}></div>
+        <div
+          className={cn(
+            'w-2 h-2 rounded-full group-hover:bg-zinc-400',
+            theme.transition.colors,
+            indicator
+          )}
+        />
         <div>
-          <h4 className="font-medium text-zinc-900 text-sm">{title}</h4>
-          <p className="text-xs text-zinc-500">{subtitle}</p>
+          <h4 className={cn(theme.font.medium, theme.colors.text.primary, theme.text.sm)}>
+            {title}
+          </h4>
+          {subtitle && (
+            <p className={cn(theme.text.xs, theme.colors.text.muted)}>{subtitle}</p>
+          )}
         </div>
       </div>
+
       <div className="flex items-center gap-3">
-        <span className={cn(
-          "text-xs px-2 py-1 font-medium",
-          styleConstants.radius.full,
-          getStatusColors(status)
-        )}>
-          {status}
-        </span>
-        <span className="text-xs text-zinc-400">{time}</span>
-        {onMoreClick && (
-          <button 
-            onClick={onMoreClick}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <MoreHorizontal size={14} className="text-zinc-300" />
-          </button>
+        {status && (
+          <span className={cn(presets.badge, getStatusColor(status))}>{status}</span>
+        )}
+        {time && <span className={cn(theme.text.xs, theme.colors.text.subtle)}>{time}</span>}
+        {action && (
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity">{action}</div>
         )}
       </div>
-    </div>
+    </Component>
   );
-};
+}

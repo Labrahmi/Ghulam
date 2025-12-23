@@ -1,12 +1,9 @@
-import {
-  Home,
-  FolderOpen,
-  Layers3,
-  Settings,
-  Info,
-  LucideIcon,
-} from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
+/**
+ * Navigation Item Type
+ * Used for sidebar and navigation menus
+ */
 export interface NavigationItem {
   id: string;
   label: string;
@@ -15,38 +12,9 @@ export interface NavigationItem {
 }
 
 /**
- * Navigation configuration for the application
- * Customize this array to change the sidebar navigation
+ * Navigation items are defined in the sidebar component
+ * because icon components cannot cross the server/client boundary.
+ * 
+ * This file exports the type for use across the app.
+ * See: src/components/layout/sidebar.tsx for the actual navigation config.
  */
-export const navigationConfig: NavigationItem[] = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    href: '/app',
-    icon: Home,
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    href: '#',
-    icon: FolderOpen,
-  },
-  {
-    id: 'side-projects',
-    label: 'Side Projects',
-    href: '#',
-    icon: Layers3,
-  },
-  {
-    id: 'settings',
-    label: 'Settings',
-    href: '#',
-    icon: Settings,
-  },
-  {
-    id: 'apis',
-    label: 'APIs',
-    href: '#',
-    icon: Info,
-  },
-];
