@@ -1,2 +1,1 @@
-# Ghulam
-Al Ghulam
+# AppName
